@@ -56,7 +56,7 @@
             return result[1];
         }
     });
-    
+
     moduleSgUtils.directive('sgMaxDate', function() {
         return {
             require: 'ngModel',
