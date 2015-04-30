@@ -151,7 +151,7 @@
                 $scope.$watch('ubigeo.departamento', function(){
                     if(!angular.isUndefined($scope.ubigeo.departamento) && $scope.ubigeo.departamento){
                         $scope.provincias = $scope.ubigeo.departamento.$getProvincias().$object;
-                        ngModel[1].$setDirty();
+                        ngModel[0].$setDirty();
                     } else {
                         $scope.ubigeo.provincia = undefined;
                         $scope.ubigeo.distrito = undefined;
@@ -200,7 +200,7 @@
                                     }
                                 }
 
-                                SGProvincia.distritos($scope.ubigeo.departamento.codigo, $scope.ubigeo.provincia.codigo).then(function(data){
+                                SGProvincia.$getDistritos($scope.ubigeo.departamento.codigo, $scope.ubigeo.provincia.codigo).then(function(data){
                                     $scope.distritos = data;
 
                                     for(var i=0;i<$scope.distritos.length;i++){
