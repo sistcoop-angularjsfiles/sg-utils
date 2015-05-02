@@ -118,7 +118,7 @@
      * Estas clases dependen de sg-ubigeo.
      */
 
-    moduleSgUtilsUbigeo.directive('sgUbigeo',function(SGUbigeo){
+    moduleSgUtilsUbigeo.directive('sgUbigeo',['SGUbigeo', function(SGUbigeo){
         return {
             restrict:'E',
             replace: false,
@@ -271,7 +271,7 @@
             +'</div>'
             +'</div>'
         }
-    });
+    }]);
 
 
 
