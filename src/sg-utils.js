@@ -9,6 +9,7 @@
     var moduleSgUtilsOrganizacion = angular.module('sg-utils-organizacion', []);
     var moduleSgUtilsCooperativa = angular.module('sg-utils-cooperativa', []);
     var moduleSgUtilsProducto = angular.module('sg-utils-producto', []);
+    var moduleSgUtilsRrhh = angular.module('sg-utils-rrhh', []);
 
     var moduleSgUtils = angular.module('sg-utils',
         [
@@ -18,7 +19,8 @@
             'sg-utils-persona',
             'sg-utils-organizacion',
             'sg-utils-cooperativa',
-            'sg-utils-producto'
+            'sg-utils-producto',
+            'sg-utils-rrhh'
         ]);
 
     /**
@@ -72,7 +74,7 @@
 
 
 
-    moduleSgUtils.service('SGDialog', function($modal) {
+    moduleSgUtils.service('SGDialog', ['$modal', function($modal) {
         var dialog = {};
 
         var openDialog = function(title, message, btns) {
@@ -88,6 +90,7 @@
                     $modalInstance.dismiss('cancel');
                 };
             };
+            controller.$inject = ['$scope', '$modalInstance', 'title', 'message', 'btns'];
 
             return $modal.open({
                 template: ''+
@@ -126,7 +129,7 @@
 
         dialog.confirmDelete = function(name, type, success) {
             var title = 'Eliminar ' + escapeHtml(type.charAt(0).toUpperCase() + type.slice(1));
-            var msg = 'Â¿Estas seguro de querer eliminar permanentemente el/la ' + type + ' ' + name + '?';
+            var msg = '¿Estas seguro de querer eliminar permanentemente el/la ' + type + ' ' + name + '?';
             var btns = {
                 ok: {
                     label: 'Eliminar',
@@ -174,7 +177,7 @@
         };
 
         return dialog
-    });
+    }]);
 
 
     /**
@@ -395,12 +398,54 @@
 
 
 
+    /**
+     * Module sg-utils-rrhh.
+     *
+     * Utils generales para sg-utils-rrhh.
+     * Estas clases dependen de sg-rrhh.
+     */
+
+    moduleSgUtilsRrhh.directive('sgDenominacionSucursalValidate', function($q, SGSucursal) {
+        return {
+            restrict:'AE',
+            require: 'ngModel',
+            scope: {
+                sgExclude: '=sgExclude'
+            },
+            link:function($scope, elem, attrs, ngModel){
+                var selfInclude = $scope.$eval(attrs.sgSelfInclude);
+                ngModel.$asyncValidators.disponible = function(modelValue, viewValue){
+                    var value = modelValue || viewValue;
+                    return SGSucursal.$findByDenominacion(value).then(
+                        function(response){
+                            if(response){
+                                if($scope.sgExclude){
+                                    if(response.id == $scope.sgExclude.id){
+                                        return true;
+                                    }
+                                }
+                                return $q.reject('Denominacion de sucursal no disponible');
+                            }
+                            else {
+                                return true;
+                            }
+                        },
+                        function error(response){
+                            return $q.reject('Error al buscar sucursal');
+                        }
+                    );
+                };
+            }
+        };
+    });
+
+
 
     angular.module("sgtemplate/modal/modal.html", []).run(["$templateCache", function($templateCache) {
         $templateCache.put("sgtemplate/modal/modal.html",
             "<div class=\"modal-header\">\n" +
             "<button type=\"button\" class=\"close\" ng-click=\"cancel()\">\n" +
-            "<span class=\"pficon pficon-close\">Ã—</span>\n" +
+            "<span class=\"pficon pficon-close\">×</span>\n" +
             "</button>\n" +
             "<h4 class=\"modal-title\">{{title}}</h4>\n" +
             "</div>\n" +
