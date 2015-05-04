@@ -405,6 +405,40 @@
      * Estas clases dependen de sg-rrhh.
      */
 
+    moduleSgUtilsRrhh.directive('sgAbreviaturaSucursalValidate', function($q, SGSucursal) {
+        return {
+            restrict:'AE',
+            require: 'ngModel',
+            scope: {
+                sgExclude: '=sgExclude'
+            },
+            link:function($scope, elem, attrs, ngModel){
+                var selfInclude = $scope.$eval(attrs.sgSelfInclude);
+                ngModel.$asyncValidators.disponible = function(modelValue, viewValue){
+                    var value = modelValue || viewValue;
+                    return SGSucursal.$findByAbreviatura(value).then(
+                        function(response){
+                            if(response){
+                                if($scope.sgExclude){
+                                    if(response.id == $scope.sgExclude.id){
+                                        return true;
+                                    }
+                                }
+                                return $q.reject('Abreviatura de sucursal no disponible');
+                            }
+                            else {
+                                return true;
+                            }
+                        },
+                        function error(response){
+                            return $q.reject('Error al buscar sucursal');
+                        }
+                    );
+                };
+            }
+        };
+    });
+
     moduleSgUtilsRrhh.directive('sgDenominacionSucursalValidate', function($q, SGSucursal) {
         return {
             restrict:'AE',
