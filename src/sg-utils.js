@@ -480,7 +480,7 @@
             link:function($scope,elem,attrs,ngModel){
                 ngModel.$asyncValidators.disponible = function(modelValue,viewValue){
                     var value = modelValue || viewValue;
-                    return SGAgencia.$getByCodigo(value).then(
+                    return SGAgencia.$findByCodigo(value).then(
                         function(response){
                             if(response)
                                 return $q.reject('Codigo de agencia no disponible');
