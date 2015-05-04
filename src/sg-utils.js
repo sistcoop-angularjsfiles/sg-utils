@@ -398,6 +398,56 @@
 
 
 
+
+    /**
+     * Module sg-utils-cooperativa.
+     *
+     * Utils generales para sg-utils-cooperativa.
+     * Estas clases dependen de sg-persona.
+     */
+
+    moduleSgUtilsCooperativa.directive('sgMonedaBovedaAgenciaValidate', function($q, SGBoveda) {
+        return {
+            restrict: 'A',
+            require: 'ngModel',
+            link:function($scope, elem, attrs, ngModel){
+                $scope.agencia;
+                attrs.$observe('sgAgencia', function(val) {
+                    if(val){
+                        ngModel.$setViewValue(null);
+                        ngModel.$render();
+                    }
+                    $scope.agencia = $scope.$eval(val);
+                });
+
+                ngModel.$asyncValidators.disponible = function(modelValue, viewValue){
+                    var value = modelValue || viewValue;
+                    if($scope.agencia){
+
+                        return SGBoveda.$search({agencia: $scope.agencia.codigo}).then(
+                            function(response){
+                                for(var i=0; i < response.length; i++){
+                                    if(response[i].moneda == value.alphabeticCode){
+                                        return $q.reject('Moneda ya existente en agencia.');
+                                    }
+                                }
+                                return true;
+                            }, function error(){
+                                return $q.reject('error');
+                            }
+                        );
+
+                    } else {
+                        return $q.when();
+                    }
+
+                };
+            }
+        };
+    });
+
+
+
     /**
      * Module sg-utils-rrhh.
      *
