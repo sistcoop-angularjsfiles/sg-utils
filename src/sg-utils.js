@@ -473,7 +473,28 @@
         };
     });
 
-
+    moduleSgUtilsRrhh.directive('sgCodigoAgenciaValidate', function($q, SGAgencia) {
+        return {
+            restrict:'AE',
+            require: 'ngModel',
+            link:function($scope,elem,attrs,ngModel){
+                ngModel.$asyncValidators.disponible = function(modelValue,viewValue){
+                    var value = modelValue || viewValue;
+                    return SGAgencia.$getByCodigo(value).then(
+                        function(response){
+                            if(response)
+                                return $q.reject('Codigo de agencia no disponible');
+                            else
+                                return true;
+                        },
+                        function error(response){
+                            return $q.reject('Error');
+                        }
+                    );
+                };
+            }
+        };
+    });
 
     angular.module("sgtemplate/modal/modal.html", []).run(["$templateCache", function($templateCache) {
         $templateCache.put("sgtemplate/modal/modal.html",
