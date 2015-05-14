@@ -129,7 +129,7 @@
 
         dialog.confirmDelete = function(name, type, success) {
             var title = 'Eliminar ' + escapeHtml(type.charAt(0).toUpperCase() + type.slice(1));
-            var msg = 'ï¿½Estas seguro de querer eliminar permanentemente el/la ' + type + ' ' + name + '?';
+            var msg = '¿Estas seguro de querer eliminar permanentemente el/la ' + type + ' ' + name + '?';
             var btns = {
                 ok: {
                     label: 'Eliminar',
@@ -406,21 +406,50 @@
      * Estas clases dependen de sg-persona.
      */
 
-    moduleSgUtilsCooperativa.directive('sgMonedaBovedaAgenciaValidate', ['$q', 'SGBoveda', function($q, SGBoveda) {
+    moduleSgUtilsCooperativa.directive('sgMonedaBovedaAgenciaValidate', function($q, SGBoveda) {
         return {
             restrict: 'A',
             require: 'ngModel',
             link:function($scope, elem, attrs, ngModel){
                 $scope.agencia;
-                attrs.$observe('sgAgencia', function(val) {
-                    if(val){
+                attrs.$observe('sgAgencia', function (val) {
+                    if (val) {
                         ngModel.$setViewValue(null);
                         ngModel.$render();
                     }
                     $scope.agencia = $scope.$eval(val);
                 });
 
-                ngModel.$asyncValidators.disponible = function(modelValue, viewValue){
+                ngModel.$validators.disponible = function (modelValue, viewValue) {
+
+                    var value = modelValue || viewValue;
+
+                    var codigoAgencia = undefined;
+                    if($scope.agencia) {
+                        codigoAgencia = $scope.agencia.codigo;
+
+                        SGBoveda.$search({agencia: codigoAgencia}).then(
+                            function (response) {
+
+                                var band = true;
+                                for (var i = 0; i < response.length; i++) {
+                                    if (response[i].moneda == value.alphabeticCode) {
+                                        band = false;
+                                    }
+                                }
+
+                                ngModel.$setValidity("disponible", band);
+
+                            }, function error() {
+                                ngModel.$setValidity("disponible", false);
+                            }
+                        );
+                    }
+
+                    return true;
+                };
+
+                /*ngModel.$asyncValidators.disponible = function(modelValue, viewValue){
                     var value = modelValue || viewValue;
                     if($scope.agencia){
 
@@ -441,10 +470,10 @@
                         return $q.when();
                     }
 
-                };
+                };*/
             }
         };
-    }]);
+    });
 
 
 
@@ -455,7 +484,7 @@
      * Estas clases dependen de sg-rrhh.
      */
 
-    moduleSgUtilsRrhh.directive('sgAbreviaturaSucursalValidate', ['$q', 'SGSucursal', function($q, SGSucursal) {
+    moduleSgUtilsRrhh.directive('sgAbreviaturaSucursalValidate', function($q, SGSucursal) {
         return {
             restrict:'AE',
             require: 'ngModel',
@@ -487,9 +516,9 @@
                 };
             }
         };
-    }]);
+    });
 
-    moduleSgUtilsRrhh.directive('sgDenominacionSucursalValidate', ['$q', 'SGSucursal', function($q, SGSucursal) {
+    moduleSgUtilsRrhh.directive('sgDenominacionSucursalValidate', function($q, SGSucursal) {
         return {
             restrict:'AE',
             require: 'ngModel',
@@ -521,9 +550,9 @@
                 };
             }
         };
-    }]);
+    });
 
-    moduleSgUtilsRrhh.directive('sgCodigoAgenciaValidate', ['$q', 'SGAgencia', function($q, SGAgencia) {
+    moduleSgUtilsRrhh.directive('sgCodigoAgenciaValidate', function($q, SGAgencia) {
         return {
             restrict:'AE',
             require: 'ngModel',
@@ -544,13 +573,13 @@
                 };
             }
         };
-    }]);
+    });
 
     angular.module("sgtemplate/modal/modal.html", []).run(["$templateCache", function($templateCache) {
         $templateCache.put("sgtemplate/modal/modal.html",
             "<div class=\"modal-header\">\n" +
             "<button type=\"button\" class=\"close\" ng-click=\"cancel()\">\n" +
-            "<span class=\"pficon pficon-close\">ï¿½</span>\n" +
+            "<span class=\"pficon pficon-close\">×</span>\n" +
             "</button>\n" +
             "<h4 class=\"modal-title\">{{title}}</h4>\n" +
             "</div>\n" +

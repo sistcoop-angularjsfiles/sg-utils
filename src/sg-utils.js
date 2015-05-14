@@ -412,15 +412,44 @@
             require: 'ngModel',
             link:function($scope, elem, attrs, ngModel){
                 $scope.agencia;
-                attrs.$observe('sgAgencia', function(val) {
-                    if(val){
+                attrs.$observe('sgAgencia', function (val) {
+                    if (val) {
                         ngModel.$setViewValue(null);
                         ngModel.$render();
                     }
                     $scope.agencia = $scope.$eval(val);
                 });
 
-                ngModel.$asyncValidators.disponible = function(modelValue, viewValue){
+                ngModel.$validators.disponible = function (modelValue, viewValue) {
+
+                    var value = modelValue || viewValue;
+
+                    var codigoAgencia = undefined;
+                    if($scope.agencia) {
+                        codigoAgencia = $scope.agencia.codigo;
+
+                        SGBoveda.$search({agencia: codigoAgencia}).then(
+                            function (response) {
+
+                                var band = true;
+                                for (var i = 0; i < response.length; i++) {
+                                    if (response[i].moneda == value.alphabeticCode) {
+                                        band = false;
+                                    }
+                                }
+
+                                ngModel.$setValidity("disponible", band);
+
+                            }, function error() {
+                                ngModel.$setValidity("disponible", false);
+                            }
+                        );
+                    }
+
+                    return true;
+                };
+
+                /*ngModel.$asyncValidators.disponible = function(modelValue, viewValue){
                     var value = modelValue || viewValue;
                     if($scope.agencia){
 
@@ -441,7 +470,7 @@
                         return $q.when();
                     }
 
-                };
+                };*/
             }
         };
     });
