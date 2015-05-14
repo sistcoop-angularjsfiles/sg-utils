@@ -129,7 +129,7 @@
 
         dialog.confirmDelete = function(name, type, success) {
             var title = 'Eliminar ' + escapeHtml(type.charAt(0).toUpperCase() + type.slice(1));
-            var msg = '¿Estas seguro de querer eliminar permanentemente el/la ' + type + ' ' + name + '?';
+            var msg = 'ï¿½Estas seguro de querer eliminar permanentemente el/la ' + type + ' ' + name + '?';
             var btns = {
                 ok: {
                     label: 'Eliminar',
@@ -179,6 +179,46 @@
         return dialog
     }]);
 
+
+
+    moduleSgUtils.directive('sgReadOnly', function() {
+        var disabled = {};
+
+        var d = {
+            replace : false,
+            link : function(scope, element, attrs) {
+                var disable = function(i, e) {
+                    if (!e.disabled) {
+                        disabled[e.tagName + i] = true;
+                        e.disabled = true;
+                    }
+                };
+
+                var enable = function(i, e) {
+                    if (disabled[e.tagName + i]) {
+                        e.disabled = false;
+                        delete disabled[i];
+                    }
+                };
+
+                scope.$watch(attrs.sgReadOnly, function(readOnly) {
+                    if (readOnly) {
+                        element.find('input').each(disable);
+                        element.find('button').each(disable);
+                        element.find('select').each(disable);
+                        element.find('textarea').each(disable);
+                    } else {
+                        element.find('input').each(enable);
+                        element.find('input').each(enable);
+                        element.find('button').each(enable);
+                        element.find('select').each(enable);
+                        element.find('textarea').each(enable);
+                    }
+                });
+            }
+        };
+        return d;
+    });
 
     /**
      * Module sg-utils-iso3166.
@@ -406,7 +446,7 @@
      * Estas clases dependen de sg-persona.
      */
 
-    moduleSgUtilsCooperativa.directive('sgMonedaBovedaAgenciaValidate', function($q, SGBoveda) {
+    moduleSgUtilsCooperativa.directive('sgMonedaBovedaAgenciaValidate', ['$q', 'SGBoveda', function($q, SGBoveda) {
         return {
             restrict: 'A',
             require: 'ngModel',
@@ -450,30 +490,30 @@
                 };
 
                 /*ngModel.$asyncValidators.disponible = function(modelValue, viewValue){
-                    var value = modelValue || viewValue;
-                    if($scope.agencia){
+                 var value = modelValue || viewValue;
+                 if($scope.agencia){
 
-                        return SGBoveda.$search({agencia: $scope.agencia.codigo}).then(
-                            function(response){
-                                for(var i=0; i < response.length; i++){
-                                    if(response[i].moneda == value.alphabeticCode){
-                                        return $q.reject('Moneda ya existente en agencia.');
-                                    }
-                                }
-                                return true;
-                            }, function error(){
-                                return $q.reject('error');
-                            }
-                        );
+                 return SGBoveda.$search({agencia: $scope.agencia.codigo}).then(
+                 function(response){
+                 for(var i=0; i < response.length; i++){
+                 if(response[i].moneda == value.alphabeticCode){
+                 return $q.reject('Moneda ya existente en agencia.');
+                 }
+                 }
+                 return true;
+                 }, function error(){
+                 return $q.reject('error');
+                 }
+                 );
 
-                    } else {
-                        return $q.when();
-                    }
+                 } else {
+                 return $q.when();
+                 }
 
-                };*/
+                 };*/
             }
         };
-    });
+    }]);
 
 
 
@@ -484,7 +524,7 @@
      * Estas clases dependen de sg-rrhh.
      */
 
-    moduleSgUtilsRrhh.directive('sgAbreviaturaSucursalValidate', function($q, SGSucursal) {
+    moduleSgUtilsRrhh.directive('sgAbreviaturaSucursalValidate', ['$q', 'SGSucursal', function($q, SGSucursal) {
         return {
             restrict:'AE',
             require: 'ngModel',
@@ -516,9 +556,9 @@
                 };
             }
         };
-    });
+    }]);
 
-    moduleSgUtilsRrhh.directive('sgDenominacionSucursalValidate', function($q, SGSucursal) {
+    moduleSgUtilsRrhh.directive('sgDenominacionSucursalValidate', ['$q', 'SGSucursal', function($q, SGSucursal) {
         return {
             restrict:'AE',
             require: 'ngModel',
@@ -550,9 +590,9 @@
                 };
             }
         };
-    });
+    }]);
 
-    moduleSgUtilsRrhh.directive('sgCodigoAgenciaValidate', function($q, SGAgencia) {
+    moduleSgUtilsRrhh.directive('sgCodigoAgenciaValidate', ['$q', 'SGAgencia', function($q, SGAgencia) {
         return {
             restrict:'AE',
             require: 'ngModel',
@@ -573,13 +613,13 @@
                 };
             }
         };
-    });
+    }]);
 
     angular.module("sgtemplate/modal/modal.html", []).run(["$templateCache", function($templateCache) {
         $templateCache.put("sgtemplate/modal/modal.html",
             "<div class=\"modal-header\">\n" +
             "<button type=\"button\" class=\"close\" ng-click=\"cancel()\">\n" +
-            "<span class=\"pficon pficon-close\">×</span>\n" +
+            "<span class=\"pficon pficon-close\">ï¿½</span>\n" +
             "</button>\n" +
             "<h4 class=\"modal-title\">{{title}}</h4>\n" +
             "</div>\n" +

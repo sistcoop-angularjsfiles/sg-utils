@@ -180,6 +180,46 @@
     }]);
 
 
+
+    moduleSgUtils.directive('sgReadOnly', function() {
+        var disabled = {};
+
+        var d = {
+            replace : false,
+            link : function(scope, element, attrs) {
+                var disable = function(i, e) {
+                    if (!e.disabled) {
+                        disabled[e.tagName + i] = true;
+                        e.disabled = true;
+                    }
+                };
+
+                var enable = function(i, e) {
+                    if (disabled[e.tagName + i]) {
+                        e.disabled = false;
+                        delete disabled[i];
+                    }
+                };
+
+                scope.$watch(attrs.sgReadOnly, function(readOnly) {
+                    if (readOnly) {
+                        element.find('input').each(disable);
+                        element.find('button').each(disable);
+                        element.find('select').each(disable);
+                        element.find('textarea').each(disable);
+                    } else {
+                        element.find('input').each(enable);
+                        element.find('input').each(enable);
+                        element.find('button').each(enable);
+                        element.find('select').each(enable);
+                        element.find('textarea').each(enable);
+                    }
+                });
+            }
+        };
+        return d;
+    });
+
     /**
      * Module sg-utils-iso3166.
      *
@@ -450,27 +490,27 @@
                 };
 
                 /*ngModel.$asyncValidators.disponible = function(modelValue, viewValue){
-                    var value = modelValue || viewValue;
-                    if($scope.agencia){
+                 var value = modelValue || viewValue;
+                 if($scope.agencia){
 
-                        return SGBoveda.$search({agencia: $scope.agencia.codigo}).then(
-                            function(response){
-                                for(var i=0; i < response.length; i++){
-                                    if(response[i].moneda == value.alphabeticCode){
-                                        return $q.reject('Moneda ya existente en agencia.');
-                                    }
-                                }
-                                return true;
-                            }, function error(){
-                                return $q.reject('error');
-                            }
-                        );
+                 return SGBoveda.$search({agencia: $scope.agencia.codigo}).then(
+                 function(response){
+                 for(var i=0; i < response.length; i++){
+                 if(response[i].moneda == value.alphabeticCode){
+                 return $q.reject('Moneda ya existente en agencia.');
+                 }
+                 }
+                 return true;
+                 }, function error(){
+                 return $q.reject('error');
+                 }
+                 );
 
-                    } else {
-                        return $q.when();
-                    }
+                 } else {
+                 return $q.when();
+                 }
 
-                };*/
+                 };*/
             }
         };
     });
