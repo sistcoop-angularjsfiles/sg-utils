@@ -220,6 +220,186 @@
         return d;
     });
 
+
+    moduleSgUtils.directive('sgInput', function() {
+        var d = {
+            scope : true,
+            replace : false,
+            link : function(scope, element, attrs) {
+                var form = element.children('form');
+                var label = element.children('label');
+                var input = element.children('input');
+
+                var id = form.attr('name') + '.' + input.attr('name');
+
+                element.attr('class', 'control-group');
+
+                label.attr('class', 'control-label');
+                label.attr('for', id);
+
+                input.wrap('<div class="controls"/>');
+                input.attr('id', id);
+
+                if (!input.attr('placeHolder')) {
+                    input.attr('placeHolder', label.text());
+                }
+
+                if (input.attr('required')) {
+                    label.append(' <span class="required">*</span>');
+                }
+            }
+        };
+        return d;
+    });
+
+    moduleSgUtils.directive('sgEnter', function() {
+        return function(scope, element, attrs) {
+            element.bind('keydown keypress', function(event) {
+                if (event.which === 13) {
+                    scope.$apply(function() {
+                        scope.$eval(attrs.sgEnter);
+                    });
+
+                    event.preventDefault();
+                }
+            });
+        };
+    });
+
+    moduleSgUtils.directive('sgSave', function ($compile) {
+        return {
+            restrict: 'A',
+            link: function ($scope, elem, attr, ctrl) {
+                elem.addClass('btn btn-primary');
+                elem.attr('type","submit');
+                elem.bind('click', function() {
+                    $scope.$apply(function() {
+                        var form = elem.closest('form');
+                        if (form && form.attr('name')) {
+                            var ngValid = form.find('.ng-valid');
+                            if ($scope[form.attr('name')].$valid) {
+                                //ngValid.removeClass('error');
+                                ngValid.parent().removeClass('has-error');
+                                $scope['save']();
+                            } else {
+                                console.log('Missing or invalid field(s). Please verify the fields in red.');
+                                //ngValid.removeClass('error');
+                                ngValid.parent().removeClass('has-error');
+
+                                var ngInvalid = form.find('.ng-invalid');
+                                //ngInvalid.addClass('error');
+                                ngInvalid.parent().addClass('has-error');
+                            }
+                        }
+                    });
+                })
+            }
+        }
+    });
+
+    moduleSgUtils.directive('sgReset', function ($compile) {
+        return {
+            restrict: 'A',
+            link: function ($scope, elem, attr, ctrl) {
+                elem.addClass('btn btn-default');
+                elem.attr('type','submit');
+                elem.bind('click', function() {
+                    $scope.$apply(function() {
+                        var form = elem.closest('form');
+                        if (form && form.attr('name')) {
+                            form.find('.ng-valid').removeClass('error');
+                            form.find('.ng-invalid').removeClass('error');
+                            $scope['reset']();
+                        }
+                    })
+                })
+            }
+        }
+    });
+
+    moduleSgUtils.directive('sgCancel', function ($compile) {
+        return {
+            restrict: 'A',
+            link: function ($scope, elem, attr, ctrl) {
+                elem.addClass('btn btn-default');
+                elem.attr('type','submit');
+            }
+        }
+    });
+
+    moduleSgUtils.directive('sgDelete', function ($compile) {
+        return {
+            restrict: 'A',
+            link: function ($scope, elem, attr, ctrl) {
+                elem.addClass('btn btn-danger');
+                elem.attr('type','submit');
+            }
+        }
+    });
+
+    moduleSgUtils.filter('remove', function() {
+        return function(input, remove, attribute) {
+            if (!input || !remove) {
+                return input;
+            }
+
+            var out = [];
+            for ( var i = 0; i < input.length; i++) {
+                var e = input[i];
+
+                if (Array.isArray(remove)) {
+                    for (var j = 0; j < remove.length; j++) {
+                        if (attribute) {
+                            if (remove[j][attribute] == e[attribute]) {
+                                e = null;
+                                break;
+                            }
+                        } else {
+                            if (remove[j] == e) {
+                                e = null;
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    if (attribute) {
+                        if (remove[attribute] == e[attribute]) {
+                            e = null;
+                        }
+                    } else {
+                        if (remove == e) {
+                            e = null;
+                        }
+                    }
+                }
+
+                if (e != null) {
+                    out.push(e);
+                }
+            }
+
+            return out;
+        };
+    });
+
+    moduleSgUtils.filter('capitalize', function() {
+        return function(input) {
+            if (!input) {
+                return;
+            }
+            var result = input.substring(0, 1).toUpperCase();
+            var s = input.substring(1);
+            for (var i=0; i<s.length ; i++) {
+                var c = s[i];
+                if (c.match(/[A-Z]/)) {
+                    result = result.concat(' ')
+                };
+                result = result.concat(c);
+            };
+            return result;
+        };
+    });
+
     /**
      * Module sg-utils-iso3166.
      *
@@ -535,11 +715,13 @@
                 var selfInclude = $scope.$eval(attrs.sgSelfInclude);
                 ngModel.$asyncValidators.disponible = function(modelValue, viewValue){
                     var value = modelValue || viewValue;
-                    return SGSucursal.$findByAbreviatura(value).then(
+
+                    //Buscar por abreviatura
+                    return SGSucursal.$search({abreviatura: value}).then(
                         function(response){
-                            if(response){
+                            if(response.length){
                                 if($scope.sgExclude){
-                                    if(response.id == $scope.sgExclude.id){
+                                    if(response[0].id == $scope.sgExclude.id){
                                         return true;
                                     }
                                 }
@@ -569,11 +751,13 @@
                 var selfInclude = $scope.$eval(attrs.sgSelfInclude);
                 ngModel.$asyncValidators.disponible = function(modelValue, viewValue){
                     var value = modelValue || viewValue;
-                    return SGSucursal.$findByDenominacion(value).then(
+
+                    //Buscar por denominacion
+                    return SGSucursal.$search({denominacion: value}).then(
                         function(response){
-                            if(response){
+                            if(response.length){
                                 if($scope.sgExclude){
-                                    if(response.id == $scope.sgExclude.id){
+                                    if(response[0].id == $scope.sgExclude.id){
                                         return true;
                                     }
                                 }
