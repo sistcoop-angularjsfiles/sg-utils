@@ -704,7 +704,7 @@
      * Estas clases dependen de sg-rrhh.
      */
 
-    moduleSgUtilsRrhh.directive('sgAbreviaturaSucursalValidate', ['$q', 'SGSucursal', function($q, SGSucursal) {
+    /*moduleSgUtilsRrhh.directive('sgAbreviaturaSucursalValidate', function($q, SGSucursal) {
         return {
             restrict:'AE',
             require: 'ngModel',
@@ -738,7 +738,7 @@
                 };
             }
         };
-    }]);
+    });*/
 
     moduleSgUtilsRrhh.directive('sgDenominacionSucursalValidate', ['$q', 'SGSucursal', function($q, SGSucursal) {
         return {
@@ -753,11 +753,11 @@
                     var value = modelValue || viewValue;
 
                     //Buscar por denominacion
-                    return SGSucursal.$search({denominacion: value}).then(
+                    return SGSucursal.$find(value).then(
                         function(response){
-                            if(response.length){
+                            if(angular.isDefined(response)){
                                 if($scope.sgExclude){
-                                    if(response[0].id == $scope.sgExclude.id){
+                                    if(response.id == $scope.sgExclude.id){
                                         return true;
                                     }
                                 }
