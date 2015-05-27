@@ -445,6 +445,106 @@
      * Estas clases dependen de sg-ubigeo.
      */
 
+    function resolveSgUbigeoTemplate(tElement, tAttrs){
+        var layout = tAttrs.formLayout;
+        if(!layout)
+            layout = 'horizontal';
+
+        if(layout === 'basic') {
+            return ''
+                +'<div class="row">'
+                +'<div class="col-sm-4">'
+                +'<div class="form-group" ng-class="{ \'has-error\' : formSgUbigeo.departamento.$invalid && (formSgUbigeo.departamento.$touched || formSgUbigeo.$submitted)}">'
+                +'<label>Departamento</label>'
+                +'<ui-select name="departamento" ng-model="ubigeo.departamento">'
+                +'<ui-select-match placeholder="Seleccione">{{$select.selected.denominacion}}</ui-select-match>'
+                +'<ui-select-choices repeat="item in departamentos | filter: $select.search">'
+                +'<div ng-bind-html="item.denominacion | highlight: $select.search"></div>'
+                +'<small ng-bind-html="item.codigo | highlight: $select.search"></small>'
+                +'</ui-select-choices>'
+                +'</ui-select>'
+                +'<div ng-messages="formSgUbigeo.departamento.$error" ng-if="formSgUbigeo.departamento.$touched || formSgUbigeo.$submitted">'
+                +'<div class="help-block" ng-message="required">Ingrese departamento.</div>'
+                +'</div>'
+                +'</div>'
+                +'</div>'
+                +'<div class="col-sm-4">'
+                +'<div class="form-group" ng-class="{ \'has-error\' : formSgUbigeo.provincia.$invalid && (formSgUbigeo.provincia.$touched || formSgUbigeo.$submitted)}">'
+                +'<label>Provincia</label>'
+                +'<ui-select name="provincia" ng-model="ubigeo.provincia">'
+                +'<ui-select-match placeholder="Seleccione">{{$select.selected.denominacion}}</ui-select-match>'
+                +'<ui-select-choices repeat="item in provincias | filter: $select.search">'
+                +'<div ng-bind-html="item.denominacion | highlight: $select.search"></div>'
+                +'<small ng-bind-html="item.codigo | highlight: $select.search"></small>'
+                +'</ui-select-choices>'
+                +'</ui-select>'
+                +'<div ng-messages="formSgUbigeo.provincia.$error" ng-if="formSgUbigeo.provincia.$touched || formSgUbigeo.$submitted">'
+                +'<div class="help-block" ng-message="required">Ingrese provincia.</div>'
+                +'</div>'
+                +'</div>'
+                +'</div>'
+                +'<div class="col-sm-4">'
+                +'<div class="form-group" ng-class="{ \'has-error\' : formSgUbigeo.provincia.$invalid && (formSgUbigeo.provincia.$touched || formSgUbigeo.$submitted)}">'
+                +'<label>Distrito</label>'
+                +'<ui-select name="distrito" ng-model="ubigeo.distrito">'
+                +'<ui-select-match placeholder="Seleccione">{{$select.selected.denominacion}}</ui-select-match>'
+                +'<ui-select-choices repeat="item in distritos | filter: $select.search">'
+                +'<div ng-bind-html="item.denominacion | highlight: $select.search"></div>'
+                +'<small ng-bind-html="item.codigo | highlight: $select.search"></small>'
+                +'</ui-select-choices>'
+                +'</ui-select>'
+                +'<div ng-messages="formSgUbigeo.distrito.$error" ng-if="formSgUbigeo.distrito.$touched || formSgUbigeo.$submitted">'
+                +'<div class="help-block" ng-message="required">Ingrese provincia.</div>'
+                +'</div>'
+                +'</div>'
+                +'</div>'
+                +'</div>'
+        } else if (layout === 'inline') {
+
+        } else if (layout === 'horizontal') {
+            return ''
+                +'<div class="form-group" ng-class="{ \'has-error\' : (formSgUbigeo.departamento.$invalid || formSgUbigeo.provincia.$invalid || formSgUbigeo.distrito.$invalid) && (formSgUbigeo.departamento.$touched || formSgUbigeo.$submitted)}">'
+                +'<label class="col-sm-2 control-label">Ubigeo:</label>'
+                +'<div class="col-sm-3">'
+                +'<ui-select name="departamento" ng-model="ubigeo.departamento">'
+                +'<ui-select-match placeholder="Departamento">{{$select.selected.denominacion}}</ui-select-match>'
+                +'<ui-select-choices repeat="item in departamentos | filter: $select.search">'
+                +'<div ng-bind-html="item.denominacion | highlight: $select.search"></div>'
+                +'<small ng-bind-html="item.codigo | highlight: $select.search"></small>'
+                +'</ui-select-choices>'
+                +'</ui-select>'
+                +'<div ng-messages="formSgUbigeo.departamento.$error" ng-if="formSgUbigeo.departamento.$touched || formSgUbigeo.$submitted">'
+                +'<div class="help-block" ng-message="required">Ingrese departamento.</div>'
+                +'</div>'
+                +'</div>'
+                +'<div class="col-sm-3">'
+                +'<ui-select name="provincia" ng-model="ubigeo.provincia">'
+                +'<ui-select-match placeholder="Provincia">{{$select.selected.denominacion}}</ui-select-match>'
+                +'<ui-select-choices repeat="item in provincias | filter: $select.search">'
+                +'<div ng-bind-html="item.denominacion | highlight: $select.search"></div>'
+                +'<small ng-bind-html="item.codigo | highlight: $select.search"></small>'
+                +'</ui-select-choices>'
+                +'</ui-select>'
+                +'<div ng-messages="formSgUbigeo.provincia.$error" ng-if="formSgUbigeo.provincia.$touched || formSgUbigeo.$submitted">'
+                +'<div class="help-block" ng-message="required">Ingrese provincia.</div>'
+                +'</div>'
+                +'</div>'
+                +'<div class="col-sm-3">'
+                +'<ui-select name="distrito" ng-model="ubigeo.distrito">'
+                +'<ui-select-match placeholder="Distrito">{{$select.selected.denominacion}}</ui-select-match>'
+                +'<ui-select-choices repeat="item in distritos | filter: $select.search">'
+                +'<div ng-bind-html="item.denominacion | highlight: $select.search"></div>'
+                +'<small ng-bind-html="item.codigo | highlight: $select.search"></small>'
+                +'</ui-select-choices>'
+                +'</ui-select>'
+                +'<div ng-messages="formSgUbigeo.distrito.$error" ng-if="formSgUbigeo.distrito.$touched || formSgUbigeo.$submitted">'
+                +'<div class="help-block" ng-message="required">Ingrese provincia.</div>'
+                +'</div>'
+                +'</div>'
+                +'</div>'
+        }
+    };
+
     moduleSgUtilsUbigeo.directive('sgUbigeo',['SGUbigeo', function(SGUbigeo){
         return {
             restrict:'E',
@@ -547,56 +647,10 @@
                 };
             },
             scope: {
-                requerido: '@'
+                requerido: '@',
+                formLayout: '@'
             },
-            template: ''
-            +'<div class="row">'
-            +'<div class="col-sm-4">'
-            +'<div class="form-group" ng-class="{ \'has-error\' : formSgUbigeo.departamento.$invalid && (formSgUbigeo.departamento.$touched || formSgUbigeo.$submitted)}">'
-            +'<label>Departamento</label>'
-            +'<ui-select name="departamento" ng-model="ubigeo.departamento">'
-            +'<ui-select-match placeholder="Seleccione">{{$select.selected.denominacion}}</ui-select-match>'
-            +'<ui-select-choices repeat="item in departamentos | filter: $select.search">'
-            +'<div ng-bind-html="item.denominacion | highlight: $select.search"></div>'
-            +'<small ng-bind-html="item.codigo | highlight: $select.search"></small>'
-            +'</ui-select-choices>'
-            +'</ui-select>'
-            +'<div ng-messages="formSgUbigeo.departamento.$error" ng-if="formSgUbigeo.departamento.$touched || formSgUbigeo.$submitted">'
-            +'<div class="help-block" ng-message="required">Ingrese departamento.</div>'
-            +'</div>'
-            +'</div>'
-            +'</div>'
-            +'<div class="col-sm-4">'
-            +'<div class="form-group" ng-class="{ \'has-error\' : formSgUbigeo.provincia.$invalid && (formSgUbigeo.provincia.$touched || formSgUbigeo.$submitted)}">'
-            +'<label>Provincia</label>'
-            +'<ui-select name="provincia" ng-model="ubigeo.provincia">'
-            +'<ui-select-match placeholder="Seleccione">{{$select.selected.denominacion}}</ui-select-match>'
-            +'<ui-select-choices repeat="item in provincias | filter: $select.search">'
-            +'<div ng-bind-html="item.denominacion | highlight: $select.search"></div>'
-            +'<small ng-bind-html="item.codigo | highlight: $select.search"></small>'
-            +'</ui-select-choices>'
-            +'</ui-select>'
-            +'<div ng-messages="formSgUbigeo.provincia.$error" ng-if="formSgUbigeo.provincia.$touched || formSgUbigeo.$submitted">'
-            +'<div class="help-block" ng-message="required">Ingrese provincia.</div>'
-            +'</div>'
-            +'</div>'
-            +'</div>'
-            +'<div class="col-sm-4">'
-            +'<div class="form-group" ng-class="{ \'has-error\' : formSgUbigeo.provincia.$invalid && (formSgUbigeo.provincia.$touched || formSgUbigeo.$submitted)}">'
-            +'<label>Distrito</label>'
-            +'<ui-select name="distrito" ng-model="ubigeo.distrito">'
-            +'<ui-select-match placeholder="Seleccione">{{$select.selected.denominacion}}</ui-select-match>'
-            +'<ui-select-choices repeat="item in distritos | filter: $select.search">'
-            +'<div ng-bind-html="item.denominacion | highlight: $select.search"></div>'
-            +'<small ng-bind-html="item.codigo | highlight: $select.search"></small>'
-            +'</ui-select-choices>'
-            +'</ui-select>'
-            +'<div ng-messages="formSgUbigeo.distrito.$error" ng-if="formSgUbigeo.distrito.$touched || formSgUbigeo.$submitted">'
-            +'<div class="help-block" ng-message="required">Ingrese provincia.</div>'
-            +'</div>'
-            +'</div>'
-            +'</div>'
-            +'</div>'
+            template: resolveSgUbigeoTemplate
         }
     }]);
 
@@ -705,40 +759,40 @@
      */
 
     /*moduleSgUtilsRrhh.directive('sgAbreviaturaSucursalValidate', function($q, SGSucursal) {
-        return {
-            restrict:'AE',
-            require: 'ngModel',
-            scope: {
-                sgExclude: '=sgExclude'
-            },
-            link:function($scope, elem, attrs, ngModel){
-                var selfInclude = $scope.$eval(attrs.sgSelfInclude);
-                ngModel.$asyncValidators.disponible = function(modelValue, viewValue){
-                    var value = modelValue || viewValue;
+     return {
+     restrict:'AE',
+     require: 'ngModel',
+     scope: {
+     sgExclude: '=sgExclude'
+     },
+     link:function($scope, elem, attrs, ngModel){
+     var selfInclude = $scope.$eval(attrs.sgSelfInclude);
+     ngModel.$asyncValidators.disponible = function(modelValue, viewValue){
+     var value = modelValue || viewValue;
 
-                    //Buscar por abreviatura
-                    return SGSucursal.$search({abreviatura: value}).then(
-                        function(response){
-                            if(response.length){
-                                if($scope.sgExclude){
-                                    if(response[0].id == $scope.sgExclude.id){
-                                        return true;
-                                    }
-                                }
-                                return $q.reject('Abreviatura de sucursal no disponible');
-                            }
-                            else {
-                                return true;
-                            }
-                        },
-                        function error(response){
-                            return $q.reject('Error al buscar sucursal');
-                        }
-                    );
-                };
-            }
-        };
-    });*/
+     //Buscar por abreviatura
+     return SGSucursal.$search({abreviatura: value}).then(
+     function(response){
+     if(response.length){
+     if($scope.sgExclude){
+     if(response[0].id == $scope.sgExclude.id){
+     return true;
+     }
+     }
+     return $q.reject('Abreviatura de sucursal no disponible');
+     }
+     else {
+     return true;
+     }
+     },
+     function error(response){
+     return $q.reject('Error al buscar sucursal');
+     }
+     );
+     };
+     }
+     };
+     });*/
 
     moduleSgUtilsRrhh.directive('sgDenominacionSucursalValidate', function($q, SGSucursal) {
         return {
