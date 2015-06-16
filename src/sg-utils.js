@@ -680,17 +680,17 @@
      * Estas clases dependen de sg-persona.
      */
 
-    moduleSgUtilsCooperativa.directive('sgMonedaBovedaAgenciaValidate', function($q, SGBoveda) {
+    moduleSgUtilsCooperativa.directive('sgMonedaBovedaAgenciaValidate', function($q, SGAgencia, SGBoveda) {
         return {
             restrict: 'A',
             require: 'ngModel',
             link:function($scope, elem, attrs, ngModel){
                 $scope.agencia;
                 attrs.$observe('sgAgencia', function (val) {
-                    if (val) {
+                    /*if (val) {
                         ngModel.$setViewValue(null);
                         ngModel.$render();
-                    }
+                    }*/
                     $scope.agencia = $scope.$eval(val);
                 });
 
@@ -698,11 +698,11 @@
 
                     var value = modelValue || viewValue;
 
-                    var codigoAgencia = undefined;
+                    var agencia = undefined;
                     if($scope.agencia) {
-                        codigoAgencia = $scope.agencia.codigo;
+                        agencia = SGAgencia.$new($scope.agencia.id).$getUrl();
 
-                        SGBoveda.$search({agencia: codigoAgencia}).then(
+                        SGBoveda.$search({agencia: agencia}).then(
                             function (response) {
 
                                 var band = true;
