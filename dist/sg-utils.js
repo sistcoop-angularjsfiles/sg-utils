@@ -779,9 +779,9 @@
                     var value = modelValue || viewValue;
 
                     //Buscar por denominacion
-                    return SGSucursal.$find(value).then(
+                    return SGSucursal.$search({denominacion: value}).then(
                         function (response) {
-                            if (angular.isDefined(response)) {
+                            if (angular.isDefined(response) && response.items.length) {
                                 if ($scope.sgExclude) {
                                     if (response.id == $scope.sgExclude.id) {
                                         return true;
