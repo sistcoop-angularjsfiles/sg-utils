@@ -1,6 +1,6 @@
 'use strict';
 
-(function(){
+(function () {
 
     var moduleSgUtilsIso3166 = angular.module('sg-utils-iso3166', []);
     var moduleSgUtilsIso4217 = angular.module('sg-utils-iso4217', []);
@@ -30,22 +30,22 @@
      * Estas clases no necesitan dependencias.
      */
 
-    moduleSgUtils.filter('si_no', function() {
-        return function(input, mode) {
+    moduleSgUtils.filter('si_no', function () {
+        return function (input, mode) {
             var defaultResult = ['Si', 'No'];
             var modeOneResult = ['Activo', 'Inactivo'];
             var modeTwoResult = ['Abierto', 'Cerrado'];
             var modeTreeResult = ['Descongelado', 'Congelado'];
 
             var result = defaultResult;
-            if(mode){
-                if(mode.toLowerCase() == 'si'){
+            if (mode) {
+                if (mode.toLowerCase() == 'si') {
                     result = defaultResult;
-                } else if(mode.toLowerCase() == 'activo'){
+                } else if (mode.toLowerCase() == 'activo') {
                     result = modeOneResult;
-                } else if(mode.toLowerCase() == 'abierto'){
+                } else if (mode.toLowerCase() == 'abierto') {
                     result = modeTwoResult;
-                } else if(mode.toLowerCase() == 'congelado'){
+                } else if (mode.toLowerCase() == 'congelado') {
                     result = modeTreeResult;
                 } else {
                     result = defaultResult;
@@ -59,11 +59,11 @@
         }
     });
 
-    moduleSgUtils.directive('sgMaxDate', function() {
+    moduleSgUtils.directive('sgMaxDate', function () {
         return {
             require: 'ngModel',
-            link: function($scope, elem, attrs, ngModel) {
-                ngModel.$validators.sgmaxdate = function(modelValue,viewValue){
+            link: function ($scope, elem, attrs, ngModel) {
+                ngModel.$validators.sgmaxdate = function (modelValue, viewValue) {
                     var value = modelValue || viewValue;
                     return $scope.maxDate >= value;
                 }
@@ -72,13 +72,11 @@
     });
 
 
-
-
-    moduleSgUtils.service('SGDialog', ['$modal', function($modal) {
+    moduleSgUtils.service('SGDialog', ['$modal', function ($modal) {
         var dialog = {};
 
-        var openDialog = function(title, message, btns) {
-            var controller = function($scope, $modalInstance, title, message, btns) {
+        var openDialog = function (title, message, btns) {
+            var controller = function ($scope, $modalInstance, title, message, btns) {
                 $scope.title = title;
                 $scope.message = message;
                 $scope.btns = btns;
@@ -93,7 +91,7 @@
             controller.$inject = ['$scope', '$modalInstance', 'title', 'message', 'btns'];
 
             return $modal.open({
-                template: ''+
+                template: '' +
                 "<div class=\"modal-header\">\n" +
                 "<button type=\"button\" class=\"close\" ng-click=\"cancel()\">\n" +
                 "<span class=\"pficon pficon-close\"></span>\n" +
@@ -108,26 +106,26 @@
                 "",
                 controller: controller,
                 resolve: {
-                    title: function() {
+                    title: function () {
                         return title;
                     },
-                    message: function() {
+                    message: function () {
                         return message;
                     },
-                    btns: function() {
+                    btns: function () {
                         return btns;
                     }
                 }
             }).result;
         };
 
-        var escapeHtml = function(str) {
+        var escapeHtml = function (str) {
             var div = document.createElement('div');
             div.appendChild(document.createTextNode(str));
             return div.innerHTML;
         };
 
-        dialog.confirmDelete = function(name, type, success) {
+        dialog.confirmDelete = function (name, type, success) {
             var title = 'Eliminar ' + escapeHtml(type.charAt(0).toUpperCase() + type.slice(1));
             var msg = '¿Estas seguro de querer eliminar permanentemente el/la ' + type + ' ' + name + '?';
             var btns = {
@@ -144,7 +142,7 @@
             openDialog(title, msg, btns).then(success);
         };
 
-        dialog.confirmGenerateKeys = function(name, type, success) {
+        dialog.confirmGenerateKeys = function (name, type, success) {
             var title = 'Generate new keys for realm';
             var msg = 'Are you sure you want to permanently generate new keys for ' + name + '?';
             var btns = {
@@ -161,7 +159,7 @@
             openDialog(title, msg, btns).then(success);
         };
 
-        dialog.confirm = function(title, message, success, cancel) {
+        dialog.confirm = function (title, message, success, cancel) {
             var btns = {
                 ok: {
                     label: title,
@@ -180,28 +178,27 @@
     }]);
 
 
-
-    moduleSgUtils.directive('sgReadOnly', function() {
+    moduleSgUtils.directive('sgReadOnly', function () {
         var disabled = {};
 
         var d = {
-            replace : false,
-            link : function(scope, element, attrs) {
-                var disable = function(i, e) {
+            replace: false,
+            link: function (scope, element, attrs) {
+                var disable = function (i, e) {
                     if (!e.disabled) {
                         disabled[e.tagName + i] = true;
                         e.disabled = true;
                     }
                 };
 
-                var enable = function(i, e) {
+                var enable = function (i, e) {
                     if (disabled[e.tagName + i]) {
                         e.disabled = false;
                         delete disabled[i];
                     }
                 };
 
-                scope.$watch(attrs.sgReadOnly, function(readOnly) {
+                scope.$watch(attrs.sgReadOnly, function (readOnly) {
                     if (readOnly) {
                         element.find('input').each(disable);
                         element.find('button').each(disable);
@@ -221,11 +218,11 @@
     });
 
 
-    moduleSgUtils.directive('sgInput', function() {
+    moduleSgUtils.directive('sgInput', function () {
         var d = {
-            scope : true,
-            replace : false,
-            link : function(scope, element, attrs) {
+            scope: true,
+            replace: false,
+            link: function (scope, element, attrs) {
                 var form = element.children('form');
                 var label = element.children('label');
                 var input = element.children('input');
@@ -252,11 +249,11 @@
         return d;
     });
 
-    moduleSgUtils.directive('sgEnter', function() {
-        return function(scope, element, attrs) {
-            element.bind('keydown keypress', function(event) {
+    moduleSgUtils.directive('sgEnter', function () {
+        return function (scope, element, attrs) {
+            element.bind('keydown keypress', function (event) {
                 if (event.which === 13) {
-                    scope.$apply(function() {
+                    scope.$apply(function () {
                         scope.$eval(attrs.sgEnter);
                     });
 
@@ -272,8 +269,8 @@
             link: function ($scope, elem, attr, ctrl) {
                 elem.addClass('btn btn-primary');
                 elem.attr('type","submit');
-                elem.bind('click', function() {
-                    $scope.$apply(function() {
+                elem.bind('click', function () {
+                    $scope.$apply(function () {
                         var form = elem.closest('form');
                         if (form && form.attr('name')) {
                             var ngValid = form.find('.ng-valid');
@@ -302,9 +299,9 @@
             restrict: 'A',
             link: function ($scope, elem, attr, ctrl) {
                 elem.addClass('btn btn-default');
-                elem.attr('type','submit');
-                elem.bind('click', function() {
-                    $scope.$apply(function() {
+                elem.attr('type', 'submit');
+                elem.bind('click', function () {
+                    $scope.$apply(function () {
                         var form = elem.closest('form');
                         if (form && form.attr('name')) {
                             form.find('.ng-valid').removeClass('error');
@@ -322,7 +319,7 @@
             restrict: 'A',
             link: function ($scope, elem, attr, ctrl) {
                 elem.addClass('btn btn-default');
-                elem.attr('type','submit');
+                elem.attr('type', 'submit');
             }
         }
     });
@@ -332,19 +329,19 @@
             restrict: 'A',
             link: function ($scope, elem, attr, ctrl) {
                 elem.addClass('btn btn-danger');
-                elem.attr('type','submit');
+                elem.attr('type', 'submit');
             }
         }
     });
 
-    moduleSgUtils.filter('remove', function() {
-        return function(input, remove, attribute) {
+    moduleSgUtils.filter('remove', function () {
+        return function (input, remove, attribute) {
             if (!input || !remove) {
                 return input;
             }
 
             var out = [];
-            for ( var i = 0; i < input.length; i++) {
+            for (var i = 0; i < input.length; i++) {
                 var e = input[i];
 
                 if (Array.isArray(remove)) {
@@ -382,20 +379,22 @@
         };
     });
 
-    moduleSgUtils.filter('capitalize', function() {
-        return function(input) {
+    moduleSgUtils.filter('capitalize', function () {
+        return function (input) {
             if (!input) {
                 return;
             }
             var result = input.substring(0, 1).toUpperCase();
             var s = input.substring(1);
-            for (var i=0; i<s.length ; i++) {
+            for (var i = 0; i < s.length; i++) {
                 var c = s[i];
                 if (c.match(/[A-Z]/)) {
                     result = result.concat(' ')
-                };
+                }
+                ;
                 result = result.concat(c);
-            };
+            }
+            ;
             return result;
         };
     });
@@ -408,34 +407,12 @@
      */
 
 
-
-
-
-
-
-
-
-
-
-
     /**
      * Module sg-utils-iso4217.
      *
      * Utils generales para sg-utils-iso4217.
      * Estas clases dependen de sg-4217.
      */
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     /**
@@ -445,125 +422,125 @@
      * Estas clases dependen de sg-ubigeo.
      */
 
-    function resolveSgUbigeoTemplate(tElement, tAttrs){
+    function resolveSgUbigeoTemplate(tElement, tAttrs) {
         var layout = tAttrs.formLayout;
-        if(!layout)
+        if (!layout)
             layout = 'horizontal';
 
-        if(layout === 'basic') {
+        if (layout === 'basic') {
             return ''
-                +'<div class="row">'
-                +'<div class="col-sm-4">'
-                +'<div class="form-group" ng-class="{ \'has-error\' : formSgUbigeo.departamento.$invalid && (formSgUbigeo.departamento.$touched || formSgUbigeo.$submitted)}">'
-                +'<label>Departamento</label>'
-                +'<ui-select name="departamento" ng-model="ubigeo.departamento">'
-                +'<ui-select-match placeholder="Seleccione">{{$select.selected.denominacion}}</ui-select-match>'
-                +'<ui-select-choices repeat="item in departamentos | filter: $select.search">'
-                +'<div ng-bind-html="item.denominacion | highlight: $select.search"></div>'
-                +'<small ng-bind-html="item.codigo | highlight: $select.search"></small>'
-                +'</ui-select-choices>'
-                +'</ui-select>'
-                +'<div ng-messages="formSgUbigeo.departamento.$error" ng-if="formSgUbigeo.departamento.$touched || formSgUbigeo.$submitted">'
-                +'<div class="help-block" ng-message="required">Ingrese departamento.</div>'
-                +'</div>'
-                +'</div>'
-                +'</div>'
-                +'<div class="col-sm-4">'
-                +'<div class="form-group" ng-class="{ \'has-error\' : formSgUbigeo.provincia.$invalid && (formSgUbigeo.provincia.$touched || formSgUbigeo.$submitted)}">'
-                +'<label>Provincia</label>'
-                +'<ui-select name="provincia" ng-model="ubigeo.provincia">'
-                +'<ui-select-match placeholder="Seleccione">{{$select.selected.denominacion}}</ui-select-match>'
-                +'<ui-select-choices repeat="item in provincias | filter: $select.search">'
-                +'<div ng-bind-html="item.denominacion | highlight: $select.search"></div>'
-                +'<small ng-bind-html="item.codigo | highlight: $select.search"></small>'
-                +'</ui-select-choices>'
-                +'</ui-select>'
-                +'<div ng-messages="formSgUbigeo.provincia.$error" ng-if="formSgUbigeo.provincia.$touched || formSgUbigeo.$submitted">'
-                +'<div class="help-block" ng-message="required">Ingrese provincia.</div>'
-                +'</div>'
-                +'</div>'
-                +'</div>'
-                +'<div class="col-sm-4">'
-                +'<div class="form-group" ng-class="{ \'has-error\' : formSgUbigeo.provincia.$invalid && (formSgUbigeo.provincia.$touched || formSgUbigeo.$submitted)}">'
-                +'<label>Distrito</label>'
-                +'<ui-select name="distrito" ng-model="ubigeo.distrito">'
-                +'<ui-select-match placeholder="Seleccione">{{$select.selected.denominacion}}</ui-select-match>'
-                +'<ui-select-choices repeat="item in distritos | filter: $select.search">'
-                +'<div ng-bind-html="item.denominacion | highlight: $select.search"></div>'
-                +'<small ng-bind-html="item.codigo | highlight: $select.search"></small>'
-                +'</ui-select-choices>'
-                +'</ui-select>'
-                +'<div ng-messages="formSgUbigeo.distrito.$error" ng-if="formSgUbigeo.distrito.$touched || formSgUbigeo.$submitted">'
-                +'<div class="help-block" ng-message="required">Ingrese provincia.</div>'
-                +'</div>'
-                +'</div>'
-                +'</div>'
-                +'</div>'
+                + '<div class="row">'
+                + '<div class="col-sm-4">'
+                + '<div class="form-group" ng-class="{ \'has-error\' : formSgUbigeo.departamento.$invalid && (formSgUbigeo.departamento.$touched || formSgUbigeo.$submitted)}">'
+                + '<label>Departamento</label>'
+                + '<ui-select name="departamento" ng-model="ubigeo.departamento">'
+                + '<ui-select-match placeholder="Seleccione">{{$select.selected.denominacion}}</ui-select-match>'
+                + '<ui-select-choices repeat="item in departamentos | filter: $select.search">'
+                + '<div ng-bind-html="item.denominacion | highlight: $select.search"></div>'
+                + '<small ng-bind-html="item.codigo | highlight: $select.search"></small>'
+                + '</ui-select-choices>'
+                + '</ui-select>'
+                + '<div ng-messages="formSgUbigeo.departamento.$error" ng-if="formSgUbigeo.departamento.$touched || formSgUbigeo.$submitted">'
+                + '<div class="help-block" ng-message="required">Ingrese departamento.</div>'
+                + '</div>'
+                + '</div>'
+                + '</div>'
+                + '<div class="col-sm-4">'
+                + '<div class="form-group" ng-class="{ \'has-error\' : formSgUbigeo.provincia.$invalid && (formSgUbigeo.provincia.$touched || formSgUbigeo.$submitted)}">'
+                + '<label>Provincia</label>'
+                + '<ui-select name="provincia" ng-model="ubigeo.provincia">'
+                + '<ui-select-match placeholder="Seleccione">{{$select.selected.denominacion}}</ui-select-match>'
+                + '<ui-select-choices repeat="item in provincias | filter: $select.search">'
+                + '<div ng-bind-html="item.denominacion | highlight: $select.search"></div>'
+                + '<small ng-bind-html="item.codigo | highlight: $select.search"></small>'
+                + '</ui-select-choices>'
+                + '</ui-select>'
+                + '<div ng-messages="formSgUbigeo.provincia.$error" ng-if="formSgUbigeo.provincia.$touched || formSgUbigeo.$submitted">'
+                + '<div class="help-block" ng-message="required">Ingrese provincia.</div>'
+                + '</div>'
+                + '</div>'
+                + '</div>'
+                + '<div class="col-sm-4">'
+                + '<div class="form-group" ng-class="{ \'has-error\' : formSgUbigeo.provincia.$invalid && (formSgUbigeo.provincia.$touched || formSgUbigeo.$submitted)}">'
+                + '<label>Distrito</label>'
+                + '<ui-select name="distrito" ng-model="ubigeo.distrito">'
+                + '<ui-select-match placeholder="Seleccione">{{$select.selected.denominacion}}</ui-select-match>'
+                + '<ui-select-choices repeat="item in distritos | filter: $select.search">'
+                + '<div ng-bind-html="item.denominacion | highlight: $select.search"></div>'
+                + '<small ng-bind-html="item.codigo | highlight: $select.search"></small>'
+                + '</ui-select-choices>'
+                + '</ui-select>'
+                + '<div ng-messages="formSgUbigeo.distrito.$error" ng-if="formSgUbigeo.distrito.$touched || formSgUbigeo.$submitted">'
+                + '<div class="help-block" ng-message="required">Ingrese provincia.</div>'
+                + '</div>'
+                + '</div>'
+                + '</div>'
+                + '</div>'
         } else if (layout === 'inline') {
 
         } else if (layout === 'horizontal') {
             return ''
-                +'<div class="form-group" ng-class="{ \'has-error\' : (formSgUbigeo.departamento.$invalid || formSgUbigeo.provincia.$invalid || formSgUbigeo.distrito.$invalid) && (formSgUbigeo.departamento.$touched || formSgUbigeo.$submitted)}">'
-                +'<label class="col-sm-2 control-label">Ubigeo:</label>'
-                +'<div class="col-sm-3">'
-                +'<ui-select name="departamento" ng-model="ubigeo.departamento">'
-                +'<ui-select-match placeholder="Departamento">{{$select.selected.denominacion}}</ui-select-match>'
-                +'<ui-select-choices repeat="item in departamentos | filter: $select.search">'
-                +'<div ng-bind-html="item.denominacion | highlight: $select.search"></div>'
-                +'<small ng-bind-html="item.codigo | highlight: $select.search"></small>'
-                +'</ui-select-choices>'
-                +'</ui-select>'
-                +'<div ng-messages="formSgUbigeo.departamento.$error" ng-if="formSgUbigeo.departamento.$touched || formSgUbigeo.$submitted">'
-                +'<div class="help-block" ng-message="required">Ingrese departamento.</div>'
-                +'</div>'
-                +'</div>'
-                +'<div class="col-sm-3">'
-                +'<ui-select name="provincia" ng-model="ubigeo.provincia">'
-                +'<ui-select-match placeholder="Provincia">{{$select.selected.denominacion}}</ui-select-match>'
-                +'<ui-select-choices repeat="item in provincias | filter: $select.search">'
-                +'<div ng-bind-html="item.denominacion | highlight: $select.search"></div>'
-                +'<small ng-bind-html="item.codigo | highlight: $select.search"></small>'
-                +'</ui-select-choices>'
-                +'</ui-select>'
-                +'<div ng-messages="formSgUbigeo.provincia.$error" ng-if="formSgUbigeo.provincia.$touched || formSgUbigeo.$submitted">'
-                +'<div class="help-block" ng-message="required">Ingrese provincia.</div>'
-                +'</div>'
-                +'</div>'
-                +'<div class="col-sm-3">'
-                +'<ui-select name="distrito" ng-model="ubigeo.distrito">'
-                +'<ui-select-match placeholder="Distrito">{{$select.selected.denominacion}}</ui-select-match>'
-                +'<ui-select-choices repeat="item in distritos | filter: $select.search">'
-                +'<div ng-bind-html="item.denominacion | highlight: $select.search"></div>'
-                +'<small ng-bind-html="item.codigo | highlight: $select.search"></small>'
-                +'</ui-select-choices>'
-                +'</ui-select>'
-                +'<div ng-messages="formSgUbigeo.distrito.$error" ng-if="formSgUbigeo.distrito.$touched || formSgUbigeo.$submitted">'
-                +'<div class="help-block" ng-message="required">Ingrese provincia.</div>'
-                +'</div>'
-                +'</div>'
-                +'</div>'
+                + '<div class="form-group" ng-class="{ \'has-error\' : (formSgUbigeo.departamento.$invalid || formSgUbigeo.provincia.$invalid || formSgUbigeo.distrito.$invalid) && (formSgUbigeo.departamento.$touched || formSgUbigeo.$submitted)}">'
+                + '<label class="col-sm-2 control-label">Ubigeo:</label>'
+                + '<div class="col-sm-3">'
+                + '<ui-select name="departamento" ng-model="ubigeo.departamento">'
+                + '<ui-select-match placeholder="Departamento">{{$select.selected.denominacion}}</ui-select-match>'
+                + '<ui-select-choices repeat="item in departamentos | filter: $select.search">'
+                + '<div ng-bind-html="item.denominacion | highlight: $select.search"></div>'
+                + '<small ng-bind-html="item.codigo | highlight: $select.search"></small>'
+                + '</ui-select-choices>'
+                + '</ui-select>'
+                + '<div ng-messages="formSgUbigeo.departamento.$error" ng-if="formSgUbigeo.departamento.$touched || formSgUbigeo.$submitted">'
+                + '<div class="help-block" ng-message="required">Ingrese departamento.</div>'
+                + '</div>'
+                + '</div>'
+                + '<div class="col-sm-3">'
+                + '<ui-select name="provincia" ng-model="ubigeo.provincia">'
+                + '<ui-select-match placeholder="Provincia">{{$select.selected.denominacion}}</ui-select-match>'
+                + '<ui-select-choices repeat="item in provincias | filter: $select.search">'
+                + '<div ng-bind-html="item.denominacion | highlight: $select.search"></div>'
+                + '<small ng-bind-html="item.codigo | highlight: $select.search"></small>'
+                + '</ui-select-choices>'
+                + '</ui-select>'
+                + '<div ng-messages="formSgUbigeo.provincia.$error" ng-if="formSgUbigeo.provincia.$touched || formSgUbigeo.$submitted">'
+                + '<div class="help-block" ng-message="required">Ingrese provincia.</div>'
+                + '</div>'
+                + '</div>'
+                + '<div class="col-sm-3">'
+                + '<ui-select name="distrito" ng-model="ubigeo.distrito">'
+                + '<ui-select-match placeholder="Distrito">{{$select.selected.denominacion}}</ui-select-match>'
+                + '<ui-select-choices repeat="item in distritos | filter: $select.search">'
+                + '<div ng-bind-html="item.denominacion | highlight: $select.search"></div>'
+                + '<small ng-bind-html="item.codigo | highlight: $select.search"></small>'
+                + '</ui-select-choices>'
+                + '</ui-select>'
+                + '<div ng-messages="formSgUbigeo.distrito.$error" ng-if="formSgUbigeo.distrito.$touched || formSgUbigeo.$submitted">'
+                + '<div class="help-block" ng-message="required">Ingrese provincia.</div>'
+                + '</div>'
+                + '</div>'
+                + '</div>'
         }
     };
 
-    moduleSgUtilsUbigeo.directive('sgUbigeo',['SGUbigeo', function(SGUbigeo){
+    moduleSgUtilsUbigeo.directive('sgUbigeo', ['SGUbigeo', function (SGUbigeo) {
         return {
-            restrict:'E',
+            restrict: 'E',
             replace: false,
-            require: ['^form','ngModel'],
-            link: function($scope, elem, attrs, ngModel){
+            require: ['^form', 'ngModel'],
+            link: function ($scope, elem, attrs, ngModel) {
 
-                ngModel[1].$validators.sgubigeo = function(modelValue,viewValue){
+                ngModel[1].$validators.sgubigeo = function (modelValue, viewValue) {
                     var value = modelValue || viewValue;
                     value = value ? value : '';
                     //false representa error y true represeta exito
-                    if($scope.requerido)
+                    if ($scope.requerido)
                         return (value.length == 6);
                     else
-                        return (value.length == 6  || value.length == 0);
+                        return (value.length == 6 || value.length == 0);
                 };
 
-                SGUbigeo.$search().then(function(data){
-                    $scope.departamentos = data;
+                SGUbigeo.$search().then(function (data) {
+                    $scope.departamentos = data.items;
                     $scope.activeListener();
                 });
                 $scope.provincias = undefined;
@@ -575,9 +552,11 @@
                     distrito: undefined
                 };
 
-                $scope.$watch('ubigeo.departamento', function(){
-                    if(!angular.isUndefined($scope.ubigeo.departamento) && $scope.ubigeo.departamento){
-                        $scope.provincias = $scope.ubigeo.departamento.$getProvincias().$object;
+                $scope.$watch('ubigeo.departamento', function () {
+                    if (!angular.isUndefined($scope.ubigeo.departamento) && $scope.ubigeo.departamento) {
+                        SGUbigeo.$search({ubigeo: $scope.ubigeo.departamento.ubigeo.substring(0, 2)}).then(function (data) {
+                            $scope.provincias = data.items;
+                        });
                         ngModel[0].$setDirty();
                     } else {
                         $scope.ubigeo.provincia = undefined;
@@ -587,58 +566,62 @@
                         $scope.distritos = undefined;
                     }
                 });
-                $scope.$watch('ubigeo.provincia', function(){
-                    if(!angular.isUndefined($scope.ubigeo.provincia) && $scope.ubigeo.provincia){
-                        $scope.distritos = SGUbigeo.$getDistritos($scope.ubigeo.departamento.ubigeoDepartamento, $scope.ubigeo.provincia.ubigeoProvincia).$object;
+                $scope.$watch('ubigeo.provincia', function () {
+                    if (!angular.isUndefined($scope.ubigeo.provincia) && $scope.ubigeo.provincia) {
+                        SGUbigeo.$search({ubigeo: $scope.ubigeo.provincia.ubigeo.substring(0, 4)}).then(function(data){
+                            $scope.distritos = data.items;
+                        });
                     } else {
                         $scope.ubigeo.distrito = undefined;
 
                         $scope.distritos = undefined;
                     }
                 });
-                $scope.$watch('ubigeo.distrito', function(){
-                    if(!angular.isUndefined($scope.ubigeo.distrito) && $scope.ubigeo.distrito){
+                $scope.$watch('ubigeo.distrito', function () {
+                    if (!angular.isUndefined($scope.ubigeo.distrito) && $scope.ubigeo.distrito) {
                         var ubigeo = $scope.ubigeo.distrito.ubigeo;
                         ngModel[1].$setViewValue(ubigeo);
                     }
                 });
 
-                $scope.activeListener = function(){
-                    var listener = $scope.$watch(function(){return ngModel[1].$modelValue}, function(){
-                        if( ngModel[1].$modelValue
+                $scope.activeListener = function () {
+                    var listener = $scope.$watch(function () {
+                        return ngModel[1].$modelValue
+                    }, function () {
+                        if (ngModel[1].$modelValue
                             && ngModel[1].$modelValue.length == 6
                                 //&& angular.isUndefined($scope.departamentos)
                             && angular.isUndefined($scope.provincias)
-                            && angular.isUndefined($scope.distritos)){
+                            && angular.isUndefined($scope.distritos)) {
 
-                            for(var i=0;i<$scope.departamentos.length;i++){
-                                if($scope.departamentos[i].ubigeoDepartamento == ngModel[1].$modelValue.substring(0, 2)){
+                            for (var i = 0; i < $scope.departamentos.length; i++) {
+                                if ($scope.departamentos[i].ubigeoDepartamento == ngModel[1].$modelValue.substring(0, 2)) {
                                     $scope.ubigeo.departamento = $scope.departamentos[i];
                                     break;
                                 }
                             }
 
-                            $scope.ubigeo.departamento.$getProvincias().then(function(data){
-                                $scope.provincias = data;
-                                for(var i=0;i<$scope.provincias.length;i++){
-                                    if($scope.provincias[i].ubigeoProvincia == ngModel[1].$modelValue.substring(2, 4)){
+                            SGUbigeo.$search({ubigeo: $scope.ubigeo.departamento.ubigeo.substring(0, 2)}).then(function (data) {
+                                $scope.provincias = data.items;
+                                for (var i = 0; i < $scope.provincias.length; i++) {
+                                    if ($scope.provincias[i].ubigeoProvincia == ngModel[1].$modelValue.substring(2, 4)) {
                                         $scope.ubigeo.provincia = $scope.provincias[i];
                                         break;
                                     }
                                 }
 
-                                SGUbigeo.$getDistritos($scope.ubigeo.departamento.ubigeoDepartamento, $scope.ubigeo.provincia.ubigeoProvincia).then(function(data){
-                                    $scope.distritos = data;
+                                SGUbigeo.$search({ubigeo: $scope.ubigeo.provincia.ubigeo.substring(0, 4)}).then(function (data) {
+                                    $scope.distritos = data.items;
 
-                                    for(var i=0;i<$scope.distritos.length;i++){
-                                        if($scope.distritos[i].ubigeoDistrito == ngModel[1].$modelValue.substring(4, 6)){
+                                    for (var i = 0; i < $scope.distritos.length; i++) {
+                                        if ($scope.distritos[i].ubigeoDistrito == ngModel[1].$modelValue.substring(4, 6)) {
                                             $scope.ubigeo.distrito = $scope.distritos[i];
                                             break;
                                         }
                                     }
                                 });
-
                             });
+
                             listener();
                         } else {
                             listener();
@@ -655,22 +638,12 @@
     }]);
 
 
-
-
-
-
-
     /**
      * Module sg-utils-persona.
      *
      * Utils generales para sg-utils-persona.
      * Estas clases dependen de sg-persona.
      */
-
-
-
-
-
 
 
     /**
@@ -680,17 +653,17 @@
      * Estas clases dependen de sg-persona.
      */
 
-    moduleSgUtilsCooperativa.directive('sgMonedaBovedaAgenciaValidate', function($q, SGAgencia, SGBoveda) {
+    moduleSgUtilsCooperativa.directive('sgMonedaBovedaAgenciaValidate', function ($q, SGAgencia, SGBoveda) {
         return {
             restrict: 'A',
             require: 'ngModel',
-            link:function($scope, elem, attrs, ngModel){
+            link: function ($scope, elem, attrs, ngModel) {
                 $scope.agencia;
                 attrs.$observe('sgAgencia', function (val) {
                     /*if (val) {
-                        ngModel.$setViewValue(null);
-                        ngModel.$render();
-                    }*/
+                     ngModel.$setViewValue(null);
+                     ngModel.$render();
+                     }*/
                     $scope.agencia = $scope.$eval(val);
                 });
 
@@ -699,7 +672,7 @@
                     var value = modelValue || viewValue;
 
                     var agencia = undefined;
-                    if($scope.agencia) {
+                    if ($scope.agencia) {
                         agencia = SGAgencia.$new($scope.agencia.id).$getUrl();
 
                         SGBoveda.$search({agencia: agencia}).then(
@@ -750,7 +723,6 @@
     });
 
 
-
     /**
      * Module sg-utils-rrhh.
      *
@@ -794,24 +766,24 @@
      };
      });*/
 
-    moduleSgUtilsRrhh.directive('sgDenominacionSucursalValidate', function($q, SGSucursal) {
+    moduleSgUtilsRrhh.directive('sgDenominacionSucursalValidate', function ($q, SGSucursal) {
         return {
-            restrict:'AE',
+            restrict: 'AE',
             require: 'ngModel',
             scope: {
                 sgExclude: '=sgExclude'
             },
-            link:function($scope, elem, attrs, ngModel){
+            link: function ($scope, elem, attrs, ngModel) {
                 var selfInclude = $scope.$eval(attrs.sgSelfInclude);
-                ngModel.$asyncValidators.disponible = function(modelValue, viewValue){
+                ngModel.$asyncValidators.disponible = function (modelValue, viewValue) {
                     var value = modelValue || viewValue;
 
                     //Buscar por denominacion
                     return SGSucursal.$find(value).then(
-                        function(response){
-                            if(angular.isDefined(response)){
-                                if($scope.sgExclude){
-                                    if(response.id == $scope.sgExclude.id){
+                        function (response) {
+                            if (angular.isDefined(response)) {
+                                if ($scope.sgExclude) {
+                                    if (response.id == $scope.sgExclude.id) {
                                         return true;
                                     }
                                 }
@@ -821,7 +793,7 @@
                                 return true;
                             }
                         },
-                        function error(response){
+                        function error(response) {
                             return $q.reject('Error al buscar sucursal');
                         }
                     );
@@ -830,21 +802,21 @@
         };
     });
 
-    moduleSgUtilsRrhh.directive('sgCodigoAgenciaValidate', function($q, SGAgencia) {
+    moduleSgUtilsRrhh.directive('sgCodigoAgenciaValidate', function ($q, SGAgencia) {
         return {
-            restrict:'AE',
+            restrict: 'AE',
             require: 'ngModel',
-            link:function($scope,elem,attrs,ngModel){
-                ngModel.$asyncValidators.disponible = function(modelValue,viewValue){
+            link: function ($scope, elem, attrs, ngModel) {
+                ngModel.$asyncValidators.disponible = function (modelValue, viewValue) {
                     var value = modelValue || viewValue;
                     return SGAgencia.$findByCodigo(value).then(
-                        function(response){
-                            if(response)
+                        function (response) {
+                            if (response)
                                 return $q.reject('Codigo de agencia no disponible');
                             else
                                 return true;
                         },
-                        function error(response){
+                        function error(response) {
                             return $q.reject('Error');
                         }
                     );
@@ -853,7 +825,7 @@
         };
     });
 
-    angular.module("sgtemplate/modal/modal.html", []).run(["$templateCache", function($templateCache) {
+    angular.module("sgtemplate/modal/modal.html", []).run(["$templateCache", function ($templateCache) {
         $templateCache.put("sgtemplate/modal/modal.html",
             "<div class=\"modal-header\">\n" +
             "<button type=\"button\" class=\"close\" ng-click=\"cancel()\">\n" +
@@ -869,7 +841,6 @@
             ""
         );
     }]);
-
 
 
 })();
