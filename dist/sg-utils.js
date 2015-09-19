@@ -65,6 +65,7 @@
             link: function ($scope, elem, attrs, ngModel) {
                 ngModel.$validators.sgmaxdate = function (modelValue, viewValue) {
                     var value = modelValue || viewValue;
+                    value = Date.parse(value);
                     return $scope.maxDate >= value;
                 }
             }

@@ -65,6 +65,7 @@
             link: function ($scope, elem, attrs, ngModel) {
                 ngModel.$validators.sgmaxdate = function (modelValue, viewValue) {
                     var value = modelValue || viewValue;
+                    value = Date.parse(value);
                     return $scope.maxDate >= value;
                 }
             }
@@ -127,7 +128,7 @@
 
         dialog.confirmDelete = function (name, type, success) {
             var title = 'Eliminar ' + escapeHtml(type.charAt(0).toUpperCase() + type.slice(1));
-            var msg = '¿Estas seguro de querer eliminar permanentemente el/la ' + type + ' ' + name + '?';
+            var msg = 'ï¿½Estas seguro de querer eliminar permanentemente el/la ' + type + ' ' + name + '?';
             var btns = {
                 ok: {
                     label: 'Eliminar',
@@ -263,7 +264,7 @@
         };
     });
 
-    moduleSgUtils.directive('sgSave', function ($compile) {
+    moduleSgUtils.directive('sgSave', ['$compile', function ($compile) {
         return {
             restrict: 'A',
             link: function ($scope, elem, attr, ctrl) {
@@ -292,9 +293,9 @@
                 })
             }
         }
-    });
+    }]);
 
-    moduleSgUtils.directive('sgReset', function ($compile) {
+    moduleSgUtils.directive('sgReset', ['$compile', function ($compile) {
         return {
             restrict: 'A',
             link: function ($scope, elem, attr, ctrl) {
@@ -312,9 +313,9 @@
                 })
             }
         }
-    });
+    }]);
 
-    moduleSgUtils.directive('sgCancel', function ($compile) {
+    moduleSgUtils.directive('sgCancel', ['$compile', function ($compile) {
         return {
             restrict: 'A',
             link: function ($scope, elem, attr, ctrl) {
@@ -322,9 +323,9 @@
                 elem.attr('type', 'submit');
             }
         }
-    });
+    }]);
 
-    moduleSgUtils.directive('sgDelete', function ($compile) {
+    moduleSgUtils.directive('sgDelete', ['$compile', function ($compile) {
         return {
             restrict: 'A',
             link: function ($scope, elem, attr, ctrl) {
@@ -332,7 +333,7 @@
                 elem.attr('type', 'submit');
             }
         }
-    });
+    }]);
 
     moduleSgUtils.filter('remove', function () {
         return function (input, remove, attribute) {
@@ -653,7 +654,7 @@
      * Estas clases dependen de sg-persona.
      */
 
-    moduleSgUtilsCooperativa.directive('sgMonedaBovedaAgenciaValidate', function ($q, SGAgencia, SGBoveda) {
+    moduleSgUtilsCooperativa.directive('sgMonedaBovedaAgenciaValidate', ['$q', 'SGAgencia', 'SGBoveda', function ($q, SGAgencia, SGBoveda) {
         return {
             restrict: 'A',
             require: 'ngModel',
@@ -720,7 +721,7 @@
                  };*/
             }
         };
-    });
+    }]);
 
 
     /**
@@ -766,7 +767,7 @@
      };
      });*/
 
-    moduleSgUtilsRrhh.directive('sgDenominacionSucursalValidate', function ($q, SGSucursal) {
+    moduleSgUtilsRrhh.directive('sgDenominacionSucursalValidate', ['$q', 'SGSucursal', function ($q, SGSucursal) {
         return {
             restrict: 'AE',
             require: 'ngModel',
@@ -800,9 +801,9 @@
                 };
             }
         };
-    });
+    }]);
 
-    moduleSgUtilsRrhh.directive('sgCodigoAgenciaValidate', function ($q, SGAgencia) {
+    moduleSgUtilsRrhh.directive('sgCodigoAgenciaValidate', ['$q', 'SGAgencia', function ($q, SGAgencia) {
         return {
             restrict: 'AE',
             require: 'ngModel',
@@ -823,13 +824,13 @@
                 };
             }
         };
-    });
+    }]);
 
     angular.module("sgtemplate/modal/modal.html", []).run(["$templateCache", function ($templateCache) {
         $templateCache.put("sgtemplate/modal/modal.html",
             "<div class=\"modal-header\">\n" +
             "<button type=\"button\" class=\"close\" ng-click=\"cancel()\">\n" +
-            "<span class=\"pficon pficon-close\">×</span>\n" +
+            "<span class=\"pficon pficon-close\">ï¿½</span>\n" +
             "</button>\n" +
             "<h4 class=\"modal-title\">{{title}}</h4>\n" +
             "</div>\n" +
