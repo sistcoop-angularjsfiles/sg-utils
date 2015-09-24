@@ -766,64 +766,64 @@
      };
      });*/
 
-    moduleSgUtilsRrhh.directive('sgDenominacionSucursalValidate', ['$q', 'SGSucursal', function ($q, SGSucursal) {
-        return {
-            restrict: 'AE',
-            require: 'ngModel',
-            scope: {
-                sgExclude: '=sgExclude'
-            },
-            link: function ($scope, elem, attrs, ngModel) {
-                var selfInclude = $scope.$eval(attrs.sgSelfInclude);
-                ngModel.$asyncValidators.disponible = function (modelValue, viewValue) {
-                    var value = modelValue || viewValue;
+    /*moduleSgUtilsRrhh.directive('sgDenominacionSucursalValidate', ['$q', 'SGSucursal', function ($q, SGSucursal) {
+     return {
+     restrict: 'AE',
+     require: 'ngModel',
+     scope: {
+     sgExclude: '=sgExclude'
+     },
+     link: function ($scope, elem, attrs, ngModel) {
+     var selfInclude = $scope.$eval(attrs.sgSelfInclude);
+     ngModel.$asyncValidators.disponible = function (modelValue, viewValue) {
+     var value = modelValue || viewValue;
 
-                    //Buscar por denominacion
-                    return SGSucursal.$search({denominacion: value}).then(
-                        function (response) {
-                            if (angular.isDefined(response) && response.items.length) {
-                                if ($scope.sgExclude) {
-                                    if (response.id == $scope.sgExclude.id) {
-                                        return true;
-                                    }
-                                }
-                                return $q.reject('Denominacion de sucursal no disponible');
-                            }
-                            else {
-                                return true;
-                            }
-                        },
-                        function error(response) {
-                            return $q.reject('Error al buscar sucursal');
-                        }
-                    );
-                };
-            }
-        };
-    }]);
+     //Buscar por denominacion
+     return SGSucursal.$search({denominacion: value}).then(
+     function (response) {
+     if (angular.isDefined(response) && response.items.length) {
+     if ($scope.sgExclude) {
+     if (response.id == $scope.sgExclude.id) {
+     return true;
+     }
+     }
+     return $q.reject('Denominacion de sucursal no disponible');
+     }
+     else {
+     return true;
+     }
+     },
+     function error(response) {
+     return $q.reject('Error al buscar sucursal');
+     }
+     );
+     };
+     }
+     };
+     }]);
 
-    moduleSgUtilsRrhh.directive('sgCodigoAgenciaValidate', ['$q', 'SGAgencia', function ($q, SGAgencia) {
-        return {
-            restrict: 'AE',
-            require: 'ngModel',
-            link: function ($scope, elem, attrs, ngModel) {
-                ngModel.$asyncValidators.disponible = function (modelValue, viewValue) {
-                    var value = modelValue || viewValue;
-                    return SGAgencia.$findByCodigo(value).then(
-                        function (response) {
-                            if (response)
-                                return $q.reject('Codigo de agencia no disponible');
-                            else
-                                return true;
-                        },
-                        function error(response) {
-                            return $q.reject('Error');
-                        }
-                    );
-                };
-            }
-        };
-    }]);
+     moduleSgUtilsRrhh.directive('sgCodigoAgenciaValidate', ['$q', 'SGAgencia', function ($q, SGAgencia) {
+     return {
+     restrict: 'AE',
+     require: 'ngModel',
+     link: function ($scope, elem, attrs, ngModel) {
+     ngModel.$asyncValidators.disponible = function (modelValue, viewValue) {
+     var value = modelValue || viewValue;
+     return SGAgencia.$findByCodigo(value).then(
+     function (response) {
+     if (response)
+     return $q.reject('Codigo de agencia no disponible');
+     else
+     return true;
+     },
+     function error(response) {
+     return $q.reject('Error');
+     }
+     );
+     };
+     }
+     };
+     }]);*/
 
     angular.module("sgtemplate/modal/modal.html", []).run(["$templateCache", function ($templateCache) {
         $templateCache.put("sgtemplate/modal/modal.html",

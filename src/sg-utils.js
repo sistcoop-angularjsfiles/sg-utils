@@ -766,7 +766,7 @@
      };
      });*/
 
-    moduleSgUtilsRrhh.directive('sgDenominacionSucursalValidate', ['$q', 'SGSucursal', function ($q, SGSucursal) {
+    /*moduleSgUtilsRrhh.directive('sgDenominacionSucursalValidate', ['$q', 'SGSucursal', function ($q, SGSucursal) {
         return {
             restrict: 'AE',
             require: 'ngModel',
@@ -823,7 +823,7 @@
                 };
             }
         };
-    }]);
+    }]);*/
 
     angular.module("sgtemplate/modal/modal.html", []).run(["$templateCache", function ($templateCache) {
         $templateCache.put("sgtemplate/modal/modal.html",
